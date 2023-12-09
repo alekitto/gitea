@@ -61,6 +61,10 @@ func PackageMetadata(ctx *context.Context) {
 		return
 	}
 	if len(pvs) == 0 {
+		if e := ProxyPackageMetadata(ctx, packageName); e == nil {
+			return
+		}
+
 		apiError(ctx, http.StatusNotFound, err)
 		return
 	}
@@ -151,6 +155,14 @@ func DownloadPackageFileByName(ctx *context.Context) {
 	helper.ServePackageFile(ctx, s, u, pf)
 }
 
+func GetRepositoryFromMetadata(ctx *context.Context, metadata npm_module.Metadata) (*repo_model.Repository, error) {
+	if metadata.Repository == nil {
+		return nil, fmt.Errorf("no repository defined")
+	}
+
+	return repo_model.GetRepositoryByURLRelax(ctx, metadata.Repository.URL)
+}
+
 // UploadPackage creates a new package
 func UploadPackage(ctx *context.Context) {
 	npmPackage, err := npm_module.ParsePackage(ctx.Req.Body)
@@ -163,7 +175,7 @@ func UploadPackage(ctx *context.Context) {
 		return
 	}
 
-	repo, err := repo_model.GetRepositoryByURLRelax(ctx, npmPackage.Metadata.Repository.URL)
+	repo, err := GetRepositoryFromMetadata(ctx, npmPackage.Metadata)
 	if err == nil {
 		canWrite := repo.OwnerID == ctx.Doer.ID
 
