@@ -31,6 +31,7 @@ const (
 
 type Workflow struct {
 	Entry  git.TreeEntry
+	Name   string
 	ErrMsg string
 }
 
@@ -90,7 +91,11 @@ func List(ctx *context.Context) {
 
 		workflows = make([]Workflow, 0, len(entries))
 		for _, entry := range entries {
-			workflow := Workflow{Entry: *entry}
+			workflow := Workflow{
+				Entry: *entry,
+				Name:  entry.Name(),
+			}
+
 			content, err := actions.GetContentFromEntry(entry)
 			if err != nil {
 				ctx.Error(http.StatusInternalServerError, err.Error())
@@ -102,6 +107,12 @@ func List(ctx *context.Context) {
 				workflows = append(workflows, workflow)
 				continue
 			}
+
+			// Set name from content
+			if wf.Name != "" {
+				workflow.Name = wf.Name
+			}
+
 			// Check whether have matching runner
 			for _, j := range wf.Jobs {
 				runsOnList := j.RunsOn()
