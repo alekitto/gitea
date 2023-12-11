@@ -39,6 +39,7 @@ const (
 
 type Workflow struct {
 	Entry  git.TreeEntry
+	Name   string
 	ErrMsg string
 }
 
@@ -144,7 +145,11 @@ func prepareWorkflowDispatchTemplate(ctx *context.Context, commit *git.Commit) (
 
 	workflows = make([]Workflow, 0, len(entries))
 	for _, entry := range entries {
-		workflow := Workflow{Entry: *entry}
+		workflow := Workflow{
+			Entry: *entry,
+			Name:  entry.Name(),
+		}
+
 		content, err := actions.GetContentFromEntry(entry)
 		if err != nil {
 			ctx.ServerError("GetContentFromEntry", err)
@@ -156,6 +161,12 @@ func prepareWorkflowDispatchTemplate(ctx *context.Context, commit *git.Commit) (
 			workflows = append(workflows, workflow)
 			continue
 		}
+
+		// Set name from content
+		if wf.Name != "" {
+			workflow.Name = wf.Name
+		}
+
 		// The workflow must contain at least one job without "needs". Otherwise, a deadlock will occur and no jobs will be able to run.
 		hasJobWithoutNeeds := false
 		// Check whether you have matching runner and a job without "needs"
