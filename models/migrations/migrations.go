@@ -591,6 +591,7 @@ var migrations = []Migration{
 
 	// v299 -> v300
 	NewMigration("Add content version to issue and comment table", v1_23.AddContentVersionToIssueAndComment),
+	NewMigration("Add Permissions to Actions Task", v1_23.AddActionRunJobPermissions),
 }
 
 // GetCurrentDBVersion returns the current db version

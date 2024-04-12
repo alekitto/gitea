@@ -1,6 +1,6 @@
 module code.gitea.io/gitea
 
-go 1.22
+go 1.22.0
 
 require (
 	code.gitea.io/actions-proto-go v0.4.0
@@ -55,6 +55,7 @@ require (
 	github.com/gobwas/glob v0.2.3
 	github.com/gogs/chardet v0.0.0-20211120154057-b7413eaefb8f
 	github.com/gogs/go-gogs-client v0.0.0-20210131175652-1d7215cd8d85
+	github.com/gogs/go-libravatar v0.0.0-20191106065024-33a75213d0a0
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/go-github/v61 v61.0.0
 	github.com/google/pprof v0.0.0-20240227163752-401108e1b7e7
@@ -121,7 +122,6 @@ require (
 	gopkg.in/ini.v1 v1.67.0
 	gopkg.in/yaml.v3 v3.0.1
 	mvdan.cc/xurls/v2 v2.5.0
-	strk.kbt.io/projects/go/libravatar v0.0.0-20191008002943-06d1c002b251
 	xorm.io/builder v0.3.13
 	xorm.io/xorm v1.3.8
 )
@@ -307,7 +307,7 @@ replace github.com/hashicorp/go-version => github.com/6543/go-version v1.3.1
 
 replace github.com/shurcooL/vfsgen => github.com/lunny/vfsgen v0.0.0-20220105142115-2c99e1ffdfa0
 
-replace github.com/nektos/act => gitea.com/gitea/act v0.259.1
+replace github.com/nektos/act => gitea.com/alekitto/act v0.261.2-0.20240411195152-0091f844cf98
 
 // TODO: This could be removed after https://github.com/mholt/archiver/pull/396 merged
 replace github.com/mholt/archiver/v3 => github.com/anchore/archiver/v3 v3.5.2

@@ -1073,6 +1073,8 @@ func Routes() *web.Route {
 			})
 		}, tokenRequiresScopes(auth_model.AccessTokenScopeCategoryUser), reqToken())
 
+		m.Get("/actions/id-token/request", generateOIDCToken)
+
 		// Repositories (requires repo scope, org scope)
 		m.Post("/org/{org}/repos",
 			tokenRequiresScopes(auth_model.AccessTokenScopeCategoryOrganization, auth_model.AccessTokenScopeCategoryRepository),
