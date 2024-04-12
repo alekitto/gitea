@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"code.gitea.io/gitea/modules/context"
 	"code.gitea.io/gitea/modules/json"
 	"code.gitea.io/gitea/modules/log"
 	npm_module "code.gitea.io/gitea/modules/packages/npm"
 	"code.gitea.io/gitea/modules/proxy"
+	"code.gitea.io/gitea/services/context"
 )
 
 func newHTTPClient(httpTransport *http.Transport) http.Client {

@@ -4,6 +4,7 @@
 package actions
 
 import (
+	"code.gitea.io/gitea/modules/setting"
 	"context"
 	"fmt"
 
@@ -87,6 +88,15 @@ func generateTaskContext(t *actions_model.ActionTask) (*structpb.Struct, error) 
 	gitCtx := GenerateGiteaContext(t.Job.Run, t.Job)
 	gitCtx["token"] = t.Token
 	gitCtx["gitea_runtime_token"] = giteaRuntimeToken
+
+	if t.Job.MayCreateIDToken() {
+		// The "a=1" is a dummy variable. If an audience is passed to
+		// github/core.js's getIdToken(), it appends it to the URL as "&audience=".
+		// If the URL doesn't at least have a '?', the "&audience=" part will be
+		// interpreted as part of the path.
+		gitCtx["actions_id_token_request_url"] = fmt.Sprintf("%sapi/v1/actions/id-token/request?a=1", setting.AppURL)
+		gitCtx["actions_id_token_request_token"] = t.Token
+	}
 
 	return structpb.NewStruct(gitCtx)
 }
