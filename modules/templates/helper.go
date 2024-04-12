@@ -88,6 +88,9 @@ func NewFuncMap() template.FuncMap {
 		"AssetUrlPrefix": func() string {
 			return setting.StaticURLPrefix + "/assets"
 		},
+		"OidcIssuer": func() string {
+			return setting.OIDC.IssuerURL
+		},
 		"AppUrl": func() string {
 			// The usage of AppUrl should be avoided as much as possible,
 			// because the AppURL(ROOT_URL) may not match user's visiting site and the ROOT_URL in app.ini may be incorrect.

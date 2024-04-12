@@ -109,11 +109,21 @@ var OAuth2 = struct {
 	DefaultApplications:        []string{"git-credential-oauth", "git-credential-manager", "tea"},
 }
 
+type Oidc struct {
+	IssuerURL string
+}
+
+var OIDC Oidc
+
 func loadOAuth2From(rootCfg ConfigProvider) {
 	sec := rootCfg.Section("oauth2")
 	if err := sec.MapTo(&OAuth2); err != nil {
 		log.Fatal("Failed to map OAuth2 settings: %v", err)
 		return
+	}
+
+	OIDC = Oidc{
+		IssuerURL: sec.Key("ISSUER_URL").MustString(AppURL),
 	}
 
 	if sec.HasKey("DEFAULT_APPLICATIONS") && sec.Key("DEFAULT_APPLICATIONS").String() == "" {
