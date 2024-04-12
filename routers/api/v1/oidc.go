@@ -5,9 +5,6 @@
 package v1
 
 import (
-	"fmt"
-	"net/http"
-
 	actions_model "code.gitea.io/gitea/models/actions"
 	"code.gitea.io/gitea/modules/git"
 	"code.gitea.io/gitea/modules/setting"
@@ -15,6 +12,8 @@ import (
 	auth_service "code.gitea.io/gitea/services/auth"
 	"code.gitea.io/gitea/services/auth/source/oauth2"
 	"code.gitea.io/gitea/services/context"
+	"fmt"
+	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -114,7 +113,7 @@ func generateOIDCToken(ctx *context.APIContext) {
 	notBeforeTime := timeutil.TimeStampNow().Add(-15 * 60)
 	idToken := &IDToken{
 		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer:    setting.AppURL,
+			Issuer:    setting.OIDC.IssuerURL,
 			Audience:  jwtAudience,
 			ExpiresAt: jwt.NewNumericDate(expirationTime.AsTime()),
 			NotBefore: jwt.NewNumericDate(notBeforeTime.AsTime()),
