@@ -5,6 +5,7 @@ package actions
 
 import (
 	"bytes"
+	"code.gitea.io/gitea/models/actions/permissions"
 	"context"
 	"fmt"
 	"slices"
@@ -352,7 +353,7 @@ func handleWorkflows(
 			}
 		}
 
-		wp, err := actions_model.WorkflowPermissions(dwf.Content)
+		wp, err := permissions.WorkflowPermissions(dwf.Content)
 		if err != nil {
 			log.Error("WorkflowPermissions: %v", err)
 			continue

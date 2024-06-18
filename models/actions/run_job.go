@@ -4,6 +4,7 @@
 package actions
 
 import (
+	"code.gitea.io/gitea/models/actions/permissions"
 	"context"
 	"fmt"
 	"slices"
@@ -28,12 +29,12 @@ type ActionRunJob struct {
 	Name              string `xorm:"VARCHAR(255)"`
 	Attempt           int64
 	WorkflowPayload   []byte
-	JobID             string      `xorm:"VARCHAR(255)"` // job id in workflow, not job's id
-	Needs             []string    `xorm:"JSON TEXT"`
-	RunsOn            []string    `xorm:"JSON TEXT"`
-	Permissions       Permissions `xorm:"JSON TEXT"`
-	TaskID            int64       // the latest task of the job
-	Status            Status      `xorm:"index"`
+	JobID             string                  `xorm:"VARCHAR(255)"` // job id in workflow, not job's id
+	Needs             []string                `xorm:"JSON TEXT"`
+	RunsOn            []string                `xorm:"JSON TEXT"`
+	Permissions       permissions.Permissions `xorm:"JSON TEXT"`
+	TaskID            int64                   // the latest task of the job
+	Status            Status                  `xorm:"index"`
 	Started           timeutil.TimeStamp
 	Stopped           timeutil.TimeStamp
 	Created           timeutil.TimeStamp `xorm:"created"`
@@ -73,7 +74,7 @@ func (job *ActionRunJob) LoadAttributes(ctx context.Context) error {
 }
 
 func (job *ActionRunJob) MayCreateIDToken() bool {
-	return job.Permissions.IDToken == PermissionWrite
+	return job.Permissions.IDToken == permissions.PermissionWrite
 }
 
 func GetRunJobByID(ctx context.Context, id int64) (*ActionRunJob, error) {
