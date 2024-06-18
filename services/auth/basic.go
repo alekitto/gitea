@@ -116,6 +116,9 @@ func (b *Basic) Verify(req *http.Request, w http.ResponseWriter, store DataStore
 		store.GetData()["IsActionsToken"] = true
 		store.GetData()["ActionsTaskID"] = task.ID
 
+		store.GetData()["IsApiToken"] = true
+		store.GetData()["ApiTokenScope"] = auth_model.AccessScopeForJob(&task.Job.Permissions)
+
 		return user_model.NewActionsUser(), nil
 	}
 
