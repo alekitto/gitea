@@ -4,6 +4,7 @@
 package actions
 
 import (
+	"code.gitea.io/gitea/models/actions/permissions"
 	"context"
 	"fmt"
 	"slices"
@@ -46,7 +47,7 @@ type ActionRun struct {
 	EventPayload      string                       `xorm:"LONGTEXT"`
 	TriggerEvent      string                       // the trigger event defined in the `on` configuration of the triggered workflow
 	Status            Status                       `xorm:"index"`
-	Permissions       Permissions                  `xorm:"-"`
+	Permissions       permissions.Permissions      `xorm:"-"`
 	Version           int                          `xorm:"version default 0"` // Status could be updated concomitantly, so an optimistic lock is needed
 	// Started and Stopped is used for recording last run time, if rerun happened, they will be reset to 0
 	Started timeutil.TimeStamp

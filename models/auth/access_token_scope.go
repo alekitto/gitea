@@ -4,6 +4,7 @@
 package auth
 
 import (
+	"code.gitea.io/gitea/models/actions/permissions"
 	"fmt"
 	"strings"
 
@@ -228,6 +229,30 @@ func GetScopeLevelFromAccessMode(mode perm.AccessMode) AccessTokenScopeLevel {
 	default:
 		return NoAccess
 	}
+}
+
+func AccessScopeForJob(perms *permissions.Permissions) AccessTokenScope {
+	var bitmap accessTokenScopeBitmap
+
+	if perms.Contents == permissions.PermissionWrite {
+		bitmap |= accessTokenScopeWriteRepositoryBits
+	} else if perms.Contents == permissions.PermissionRead {
+		bitmap |= accessTokenScopeReadRepositoryBits
+	}
+
+	if perms.Packages == permissions.PermissionWrite {
+		bitmap |= accessTokenScopeWritePackageBits
+	} else if perms.Packages == permissions.PermissionRead {
+		bitmap |= accessTokenScopeReadPackageBits
+	}
+
+	if perms.Issues == permissions.PermissionWrite {
+		bitmap |= accessTokenScopeWriteIssueBits
+	} else if perms.Packages == permissions.PermissionRead {
+		bitmap &= ^accessTokenScopeReadIssueBits
+	}
+
+	return bitmap.toScope()
 }
 
 // parse the scope string into a bitmap, thus removing possible duplicates.

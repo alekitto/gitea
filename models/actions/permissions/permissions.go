@@ -1,7 +1,7 @@
 // Copyright 2023 The Gitea Authors. All rights reserved.
 // SPDX-License-Identifier: MIT
 
-package actions
+package permissions
 
 import (
 	"errors"
@@ -42,7 +42,10 @@ type Permissions struct {
 func WorkflowPermissions(contents []byte) (Permissions, error) {
 	p := struct {
 		Permissions Permissions `yaml:"permissions"`
-	}{}
+	}{
+		Permissions: DefaultAccessRestricted,
+	}
+
 	err := yaml.Unmarshal(contents, &p)
 	return p.Permissions, err
 }
