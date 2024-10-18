@@ -370,7 +370,7 @@ func prepareMigrationTasks() []*migration {
 		newMigration(310, "Add Priority to ProtectedBranch", v1_23.AddPriorityToProtectedBranch),
 		newMigration(311, "Add TimeEstimate to Issue table", v1_23.AddTimeEstimateColumnToIssueTable),
 
-		newMigration(999, "Add Permissions to Actions Task", v1_23.AddActionRunJobPermissions),
+		// newMigration(999, "Add Permissions to Actions Task", v1_23.AddActionRunJobPermissions),
 	}
 	return preparedMigrations
 }
