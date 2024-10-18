@@ -375,7 +375,7 @@ func prepareMigrationTasks() []*migration {
 		newMigration(312, "Add DeleteBranchAfterMerge to AutoMerge", v1_24.AddDeleteBranchAfterMergeForAutoMerge),
 		newMigration(313, "Move PinOrder from issue table to a new table issue_pin", v1_24.MovePinOrderToTableIssuePin),
 
-		newMigration(999, "Add Permissions to Actions Task", v1_23.AddActionRunJobPermissions),
+		// newMigration(999, "Add Permissions to Actions Task", v1_23.AddActionRunJobPermissions),
 	}
 	return preparedMigrations
 }
