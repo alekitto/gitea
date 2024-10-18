@@ -128,8 +128,11 @@ func (b *Basic) Verify(req *http.Request, w http.ResponseWriter, store DataStore
 
 		err := task.LoadJob(req.Context())
 		if err == nil {
+			log.Info("Successfully loaded job task[%d]", task.ID)
 			store.GetData()["IsApiToken"] = true
 			store.GetData()["ApiTokenScope"] = auth_model.AccessScopeForJob(&task.Job.Permissions)
+		} else {
+			log.Error("Error loading job task[%d]: %v", task.ID, err)
 		}
 
 		return user_model.NewActionsUser(), nil
