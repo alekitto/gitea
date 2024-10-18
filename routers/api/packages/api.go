@@ -61,20 +61,20 @@ func reqPackageAccess(accessMode perm.AccessMode) func(ctx *context.Context) {
 				}
 				if !scopeMatched {
 					ctx.Resp.Header().Set("WWW-Authenticate", `Basic realm="Gitea Package API"`)
-					ctx.Error(http.StatusUnauthorized, "reqPackageAccess", "user should have specific permission or be a site admin")
+					ctx.Error(http.StatusUnauthorized, "Token has not sufficient permission to access this endpoint", "user should have specific permission or be a site admin")
 					return
 				}
 
 				// check if scope only applies to public resources
 				publicOnly, err := scope.PublicOnly()
 				if err != nil {
-					ctx.Error(http.StatusForbidden, "tokenRequiresScope", "parsing public resource scope failed: "+err.Error())
+					ctx.Error(http.StatusForbidden, "You are not authorized to access this endpoint", "parsing public resource scope failed: "+err.Error())
 					return
 				}
 
 				if publicOnly {
 					if ctx.Package != nil && ctx.Package.Owner.Visibility.IsPrivate() {
-						ctx.Error(http.StatusForbidden, "reqToken", "token scope is limited to public packages")
+						ctx.Error(http.StatusForbidden, "You are not authorized to access this endpoint", "token scope is limited to public packages")
 						return
 					}
 				}
@@ -83,7 +83,7 @@ func reqPackageAccess(accessMode perm.AccessMode) func(ctx *context.Context) {
 
 		if ctx.Package.AccessMode < accessMode && !ctx.IsUserSiteAdmin() {
 			ctx.Resp.Header().Set("WWW-Authenticate", `Basic realm="Gitea Package API"`)
-			ctx.Error(http.StatusUnauthorized, "reqPackageAccess", "user should have specific permission or be a site admin")
+			ctx.Error(http.StatusUnauthorized, "You are not authorized to access this endpoint", "user should have specific permission or be a site admin")
 			return
 		}
 	}
